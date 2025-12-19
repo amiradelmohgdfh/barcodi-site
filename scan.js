@@ -1,28 +1,19 @@
 const resultEl = document.getElementById("result");
-const readerEl = document.getElementById("reader");
 
-// ۱. اسکن با دوربین
-document.getElementById("start-camera").addEventListener("click", () => {
-    const html5QrCode = new Html5Qrcode("reader");
-    Html5Qrcode.getCameras().then(cameras => {
-        if(cameras && cameras.length) {
-            html5QrCode.start(
-                { facingMode: "environment" }, // دوربین پشت گوشی
-                { fps: 10, qrbox: 250 },       // تنظیم سرعت و اندازه کادر
-                (decodedText) => {             // وقتی بارکد پیدا شد
-                    resultEl.innerText = "بارکد پیدا شد: " + decodedText;
-                    html5QrCode.stop();        // متوقف کردن دوربین
-                    saveBarcode(decodedText);  // ذخیره بارکد
-                },
-                (errorMessage) => {
-                    console.log("خطا: ", errorMessage);
-                }
-            );
-        }
-    }).catch(err => console.error(err));
+// اسکن عکس گرفته شده با دوربین
+document.getElementById("camera-image").addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if(!file) return;
+
+    Html5Qrcode.scanFile(file, true)
+    .then(decodedText => {
+        resultEl.innerText = "بارکد پیدا شد: " + decodedText;
+        saveBarcode(decodedText);
+    })
+    .catch(err => resultEl.innerText = "بارکدی در تصویر پیدا نشد");
 });
 
-// ۲. اسکن با آپلود عکس
+// اسکن عکس آپلود شده از گالری
 document.getElementById("upload-image").addEventListener("change", (event) => {
     const file = event.target.files[0];
     if(!file) return;
@@ -35,7 +26,7 @@ document.getElementById("upload-image").addEventListener("change", (event) => {
     .catch(err => resultEl.innerText = "بارکدی در تصویر پیدا نشد");
 });
 
-// ۳. ذخیره بارکد در LocalStorage
+// ذخیره بارکد در LocalStorage
 function saveBarcode(code) {
     let barcodes = JSON.parse(localStorage.getItem("barcodes") || "[]");
     if(!barcodes.includes(code)){
