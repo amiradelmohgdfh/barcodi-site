@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <title>اسکن بارکد</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- کتابخانه بارکد -->
     <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
     <h2>اسکن بارکد</h2>
 
-    <!-- دکمه اسکن با دوربین -->
-    <button id="start-camera">اسکن با دوربین</button>
-    <div id="reader" style="width:300px; margin-top: 10px;"></div>
+    <!-- دکمه گرفتن عکس با دوربین -->
+    <input type="file" id="camera-image" accept="image/*" capture="environment">
+    <p>با این دکمه دوربین گوشی باز می‌شود، عکس بگیر و بارکد اسکن می‌شود.</p>
 
     <hr>
 
-    <!-- آپلود عکس -->
+    <!-- آپلود عکس از گالری -->
     <input type="file" id="upload-image" accept="image/*">
     <p id="result"></p>
 
